@@ -6,8 +6,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	// theme: apply saved theme or system preference
 	function applyTheme(theme){
-		if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
-		else document.documentElement.removeAttribute('data-theme');
+		if(theme === 'dark'){
+			document.documentElement.setAttribute('data-theme','dark');
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.removeAttribute('data-theme');
+			document.documentElement.classList.remove('dark');
+		}
 		// update toggle icon
 		if(themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
 	}

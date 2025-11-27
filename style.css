@@ -73,17 +73,25 @@ body{
 	.menu-toggle{display:block}
 
 /* Dark theme overrides (applied when documentElement has data-theme="dark") */
-[data-theme="dark"]{
-		--bg:#071022;
-		--card:#0b1220;
-		--text:#e6eef8;
-		--muted:#9aa6b2;
-		--accent:#60a5fa;
+
+/* Dark theme variables: apply when html has data-theme="dark" OR html has .dark class */
+[data-theme="dark"], .dark{
+	--bg:#071022;
+	--card:#0b1220;
+	--text:#e6eef8;
+	--muted:#9aa6b2;
+	--accent:#60a5fa;
 }
 
 [data-theme="dark"] .site-header{background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));box-shadow:0 1px 0 rgba(255,255,255,0.02)}
 [data-theme="dark"] .btn.ghost{border-color:rgba(255,255,255,0.06);color:var(--text)}
 [data-theme="dark"] .card{box-shadow:0 12px 30px rgba(2,6,23,0.45)}
+
+/* Ensure overall background and hero adapt to dark theme */
+[data-theme="dark"] body{background:var(--bg)}
+[data-theme="dark"] .hero{background:linear-gradient(180deg, rgba(2,6,23,0.6), transparent)}
+[data-theme="dark"] .hero .lead{color:var(--muted)}
+[data-theme="dark"] .site-footer{background:transparent;color:var(--muted)}
 
 }
 
