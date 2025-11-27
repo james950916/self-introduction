@@ -2,6 +2,31 @@ document.addEventListener('DOMContentLoaded', function(){
 	const menuToggle = document.getElementById('menuToggle');
 	const mainNav = document.getElementById('mainNav');
 	const navLinks = Array.from(document.querySelectorAll('.main-nav a'));
+	const themeToggle = document.getElementById('themeToggle');
+
+	// theme: apply saved theme or system preference
+	function applyTheme(theme){
+		if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
+		else document.documentElement.removeAttribute('data-theme');
+		// update toggle icon
+		if(themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+	}
+	const saved = localStorage.getItem('site-theme');
+	if(saved){ applyTheme(saved); }
+	else{
+		// use prefers-color-scheme if available
+		const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+		applyTheme(prefersDark ? 'dark' : 'light');
+	}
+
+	if(themeToggle){
+		themeToggle.addEventListener('click', ()=>{
+			const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+			const next = current === 'dark' ? 'light' : 'dark';
+			applyTheme(next);
+			localStorage.setItem('site-theme', next);
+		});
+	}
 
 	// Mobile menu toggle
 	menuToggle && menuToggle.addEventListener('click', function(){
