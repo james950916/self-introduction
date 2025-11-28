@@ -3,6 +3,33 @@ document.addEventListener('DOMContentLoaded', function(){
 	const mainNav = document.getElementById('mainNav');
 	const navLinks = Array.from(document.querySelectorAll('.main-nav a'));
 
+	// Theme (dark mode) toggle: show moon when dark, sun when light
+	const themeToggle = document.getElementById('themeToggle');
+
+	function applyTheme(theme){
+		const isDark = theme === 'dark';
+		document.documentElement.classList.toggle('dark', isDark);
+		if(themeToggle){
+			// Show moon icon when dark, sun when light (reflect current state)
+			themeToggle.textContent = isDark ? '🌙' : '☀️';
+			themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+		}
+	}
+
+	const savedTheme = localStorage.getItem('theme');
+	// Default to light on first visit (ignore system preference unless user explicitly saved a choice)
+	const initialTheme = savedTheme ? savedTheme : 'light';
+	applyTheme(initialTheme);
+
+	if(themeToggle){
+		themeToggle.addEventListener('click', function(){
+	 		const currentlyDark = document.documentElement.classList.contains('dark');
+	 		const next = currentlyDark ? 'light' : 'dark';
+	 		applyTheme(next);
+	 		localStorage.setItem('theme', next);
+	 	});
+	}
+
 	// Mobile menu toggle
 	menuToggle && menuToggle.addEventListener('click', function(){
 		mainNav.classList.toggle('open');
