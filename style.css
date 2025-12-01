@@ -8,6 +8,14 @@
 	--radius:10px;
 	--container:1100px;
 }
+/* Dark theme variables (applied when root has class `dark`) */
+:root.dark{
+	--bg:#0b1220;
+	--card:#0f1724;
+	--text:#e6eef8;
+	--muted:#9aa4b2;
+	--accent:#60a5fa;
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
@@ -16,7 +24,7 @@ body{
 	color:var(--text);
 	background:var(--bg);
 	line-height:1.6;
-	transition:background-color .32s ease,color .32s ease;
+	transition:background-color 220ms ease, color 220ms ease;
 }
 .container{max-width:var(--container);margin:0 auto;padding:0 20px}
 
@@ -31,10 +39,9 @@ body{
 .main-nav a:hover,.main-nav a.active{background:rgba(37,99,235,0.08);color:var(--accent)}
 .menu-toggle{display:none;background:none;border:0;font-size:1.2rem}
 
-/* header controls */
-.header-controls{display:flex;align-items:center;gap:8px}
-.theme-toggle{background:transparent;border:0;font-size:1.05rem;cursor:pointer;padding:6px;border-radius:8px;transition:transform .15s ease,background .15s}
-.theme-toggle:hover{transform:translateY(-3px);background:rgba(16,24,40,0.04)}
+/* Theme toggle button */
+.theme-toggle{background:transparent;border:0;font-size:1.05rem;padding:6px;border-radius:8px;cursor:pointer;color:var(--text)}
+.theme-toggle:hover{background:rgba(2,6,23,0.04)}
 
 .hero{padding:80px 0;background:linear-gradient(180deg,rgba(37,99,235,0.03),transparent)}
 .hero .lead{color:var(--muted);max-width:60ch}
@@ -63,11 +70,15 @@ body{
 
 .contact-form{display:grid;gap:8px;max-width:680px}
 .contact-form label{display:flex;flex-direction:column;font-size:0.95rem}
-.contact-form input,.contact-form textarea{padding:10px;border-radius:8px;border:1px solid rgba(16,24,40,0.08);background:#fff}
+.contact-form input,.contact-form textarea{padding:10px;border-radius:8px;border:1px solid rgba(16,24,40,0.08);background:var(--card);color:var(--text)}
 .form-actions{display:flex;gap:12px;align-items:center;margin-top:8px}
 .form-message{margin-top:10px;color:var(--muted)}
 
 .site-footer{padding:20px 0;text-align:center;color:var(--muted)}
+
+/* Small dark-mode adjustments */
+:root.dark .site-header{background:linear-gradient(90deg,rgba(3,7,18,0.6),rgba(3,7,18,0.5));backdrop-filter:blur(6px);box-shadow:0 1px 0 rgba(255,255,255,0.02)}
+:root.dark .main-nav{background:var(--card)}
 
 /* Responsive */
 @media (max-width:800px){
