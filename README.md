@@ -24,3 +24,17 @@ python -m http.server 8000; Start-Process "http://localhost:8000"
 聯絡／回饋：可直接修改 `index.html` 中的電子郵件連結 `youremail@example.com`。
 
 授權：這是個範本，可自由修改使用。
+
+## 作業紀錄（背景音樂功能）
+
+為了作業需求，曾在 `feature/bg-music` 分支上新增背景音樂功能，並在 `main` 測試合併後立即還原。以下為相關 commit（供審查用）：
+
+- 合併到 `main`（加入背景音樂）： `6caa5a1` — chore: merge feature/bg-music (add background music) for assignment
+- 還原該合併（讓 `main` 回到沒有音樂的狀態）： `c6addb8` — Revert "chore: merge feature/bg-music (add background music) for assignment"
+
+另外，該功能的實作 commit 位於分支 `feature/bg-music`：
+- `0ecb1e3` — feat(audio): autoplay muted by default; toggle mutes/unmutes and persist preference
+- `efb5a40` — feat(audio): use YouTube iframe player for background music (twq-DL-igzc)
+- `cadce03` — feat(audio): add background music toggle (feature/bg-music)
+
+如需我把上述摘要寫成單獨的 `ASSIGNMENT.md` 或加入更多說明（例如如何還原 main 狀態），請告訴我。
