@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	const mainNav = document.getElementById('mainNav');
 	const navLinks = Array.from(document.querySelectorAll('.main-nav a'));
 
+
 	// Mobile menu toggle
 	menuToggle && menuToggle.addEventListener('click', function(){
 		mainNav.classList.toggle('open');
@@ -79,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function(){
 			},800);
 		});
 	}
+
+	// (已移除) 完整主題切換按鈕：保留背景深色切換 (bg-toggle)
 
 	// Background dark toggle (separate from full theme)
 	const bgToggle = document.getElementById('bg-toggle');
