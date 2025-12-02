@@ -16,6 +16,10 @@
 .faq-a .qa{background:var(--card);padding:12px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
 .faq-a .question{font-weight:700;margin-bottom:6px}
 .faq-a .answer{color:var(--muted)}
+/* Music toggle button (header) */
+.music-toggle{background:transparent;border:0;font-size:1.05rem;padding:6px;border-radius:8px;cursor:pointer;color:var(--text);display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px}
+.music-toggle:hover{background:rgba(16,24,40,0.04);transform:translateY(-3px)}
+
 .bg-dark{
 	--bg: #071022;
 	--card: #0b1220;

@@ -118,4 +118,55 @@ document.addEventListener('DOMContentLoaded', function(){
 			},800);
 		});
 	}
+
+	// Background music control (toggle + persist)
+	(function(){
+		const musicToggle = document.getElementById('music-toggle');
+		const audio = document.getElementById('bgMusic');
+		if(!musicToggle || !audio) return;
+
+		function setMusicUI(on){
+			musicToggle.textContent = on ? '🔊' : '♪';
+			musicToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+		}
+
+		let enabled = localStorage.getItem('bg-music') === 'on';
+
+		// initialize UI
+		setMusicUI(enabled);
+
+		if(enabled){
+			audio.play().catch(()=>{
+				// autoplay blocked — update UI/state
+				enabled = false;
+				setMusicUI(false);
+				localStorage.setItem('bg-music','off');
+			});
+		}
+
+		musicToggle.addEventListener('click', ()=>{
+			enabled = !enabled;
+			if(enabled){
+				audio.play().catch(()=>{
+					enabled = false;
+					setMusicUI(false);
+					localStorage.setItem('bg-music','off');
+				});
+				localStorage.setItem('bg-music','on');
+			} else {
+				audio.pause();
+				localStorage.setItem('bg-music','off');
+			}
+			setMusicUI(enabled);
+		});
+
+		// Pause when tab hidden
+		document.addEventListener('visibilitychange', ()=>{
+			if(document.hidden){
+				audio.pause();
+			} else if(localStorage.getItem('bg-music') === 'on'){
+				audio.play().catch(()=>{});
+			}
+		});
+	})();
 });
