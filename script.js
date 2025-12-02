@@ -79,4 +79,27 @@ document.addEventListener('DOMContentLoaded', function(){
 			},800);
 		});
 	}
+
+	// Background dark toggle (separate from full theme)
+	const bgToggle = document.getElementById('bg-toggle');
+	if(bgToggle){
+		const applyBg = (on) => {
+			if(on){
+				document.documentElement.classList.add('bg-dark');
+				bgToggle.textContent = '🌙';
+				bgToggle.setAttribute('aria-pressed','true');
+			} else {
+				document.documentElement.classList.remove('bg-dark');
+				bgToggle.textContent = '🌓';
+				bgToggle.setAttribute('aria-pressed','false');
+			}
+		};
+		const saved = localStorage.getItem('bg-dark');
+		applyBg(saved === 'true');
+		bgToggle.addEventListener('click', ()=>{
+			const isOn = document.documentElement.classList.toggle('bg-dark');
+			applyBg(isOn);
+			localStorage.setItem('bg-dark', isOn ? 'true' : 'false');
+		});
+	}
 });
