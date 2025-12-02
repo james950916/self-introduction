@@ -118,4 +118,30 @@ document.addEventListener('DOMContentLoaded', function(){
 			},800);
 		});
 	}
+
+	// FAQ B: accordion behavior + persist editable answers to localStorage
+	(function(){
+		const faqItems = Array.from(document.querySelectorAll('.faq-b .faq-item'));
+		if(!faqItems.length) return;
+		faqItems.forEach((item, idx)=>{
+			const btn = item.querySelector('.faq-question');
+			const ans = item.querySelector('.faq-answer');
+			// restore saved answer
+			const key = `faq-answer-${idx}`;
+			const saved = localStorage.getItem(key);
+			if(saved && ans) ans.textContent = saved;
+			// toggle
+			btn && btn.addEventListener('click', ()=>{
+				// allow only one open at a time
+				faqItems.forEach(i=> i.classList.remove('open'));
+				item.classList.toggle('open');
+			});
+			// persist on blur
+			if(ans){
+				ans.addEventListener('blur', ()=>{
+					localStorage.setItem(key, ans.textContent || '');
+				});
+			}
+		});
+	})();
 });

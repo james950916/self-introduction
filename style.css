@@ -163,6 +163,17 @@ body{
 
 
 
+/* FAQ B styles (accordion) */
+.faq-b{max-width:900px;margin-top:12px}
+.faq-b .faq-item{border-bottom:1px solid rgba(16,24,40,0.04);}
+.faq-b .faq-question{display:block;width:100%;text-align:left;padding:12px;background:transparent;border:0;font-weight:700;cursor:pointer}
+.faq-b .faq-answer{padding:0 12px 12px 12px;color:var(--text);display:none}
+.faq-b .faq-answer[contenteditable="true"]:focus{outline:2px solid rgba(37,99,235,0.12)}
+.faq-b .faq-item.open .faq-answer{display:block}
+
+
+
+
 
 
 
