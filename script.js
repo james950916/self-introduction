@@ -119,11 +119,16 @@ document.addEventListener('DOMContentLoaded', function(){
 		});
 	}
 
-	// Background music control (toggle + persist)
+	// Background music control (YouTube iframe) — uses the video id stored in #yt-player[data-video-id]
 	(function(){
 		const musicToggle = document.getElementById('music-toggle');
-		const audio = document.getElementById('bgMusic');
-		if(!musicToggle || !audio) return;
+		const ytContainer = document.getElementById('yt-player');
+		if(!musicToggle || !ytContainer) return; // nothing to do
+
+		const videoId = ytContainer.dataset.videoId;
+		let player = null;
+		let playerReady = false;
+		let playWhenReady = false;
 
 		function setMusicUI(on){
 			musicToggle.textContent = on ? '🔊' : '♪';
@@ -131,41 +136,72 @@ document.addEventListener('DOMContentLoaded', function(){
 		}
 
 		let enabled = localStorage.getItem('bg-music') === 'on';
-
-		// initialize UI
 		setMusicUI(enabled);
 
-		if(enabled){
-			audio.play().catch(()=>{
-				// autoplay blocked — update UI/state
-				enabled = false;
-				setMusicUI(false);
-				localStorage.setItem('bg-music','off');
+		// load YouTube IFrame API if needed
+		function loadYouTubeAPI(callback){
+			if(window.YT && window.YT.Player){
+				callback();
+				return;
+			}
+			const tag = document.createElement('script');
+			tag.src = 'https://www.youtube.com/iframe_api';
+			document.head.appendChild(tag);
+			window.onYouTubeIframeAPIReady = callback;
+		}
+
+		function createPlayer(){
+			player = new YT.Player('yt-player', {
+				height: '0',
+				width: '0',
+				videoId: videoId,
+				playerVars: {
+					controls: 0,
+					autoplay: 0,
+					modestbranding: 1,
+					rel: 0,
+					loop: 1,
+					playlist: videoId
+				},
+				events: {
+					onReady: function(){
+						playerReady = true;
+						player.setVolume(50);
+						if(enabled || playWhenReady){
+							player.playVideo();
+							playWhenReady = false;
+						}
+					}
+				}
 			});
 		}
 
+		loadYouTubeAPI(function(){ createPlayer(); });
+
 		musicToggle.addEventListener('click', ()=>{
 			enabled = !enabled;
-			if(enabled){
-				audio.play().catch(()=>{
-					enabled = false;
-					setMusicUI(false);
-					localStorage.setItem('bg-music','off');
-				});
-				localStorage.setItem('bg-music','on');
-			} else {
-				audio.pause();
-				localStorage.setItem('bg-music','off');
-			}
+			localStorage.setItem('bg-music', enabled ? 'on' : 'off');
 			setMusicUI(enabled);
+			if(!playerReady){
+				// request player to play when ready
+				playWhenReady = enabled;
+				if(!player) createPlayer();
+				return;
+			}
+			if(enabled){
+				player.playVideo();
+			} else {
+				player.pauseVideo();
+			}
 		});
 
 		// Pause when tab hidden
 		document.addEventListener('visibilitychange', ()=>{
+			if(!playerReady) return;
 			if(document.hidden){
-				audio.pause();
+				player.pauseVideo();
 			} else if(localStorage.getItem('bg-music') === 'on'){
-				audio.play().catch(()=>{});
+				player.playVideo();
 			}
 		});
 	})();
