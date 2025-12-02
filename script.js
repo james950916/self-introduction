@@ -59,6 +59,28 @@ document.addEventListener('DOMContentLoaded', function(){
 		mainNav.classList.remove('open');
 	}));
 
+	// FAQ A: make questions clickable — smooth scroll to the QA block (same UX as nav links)
+	const faqQuestions = Array.from(document.querySelectorAll('.faq-a .question'));
+	faqQuestions.forEach(q => {
+		q.setAttribute('role', 'button');
+		q.setAttribute('tabindex', '0');
+		q.addEventListener('click', (e) => {
+			const qa = q.closest('.qa');
+			if(qa){
+				qa.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				// briefly add an active class for visual feedback
+				qa.classList.add('qa--active');
+				setTimeout(()=> qa.classList.remove('qa--active'), 1200);
+			}
+		});
+		q.addEventListener('keypress', (e)=>{
+			if(e.key === 'Enter' || e.key === ' '){
+				e.preventDefault();
+				q.click();
+			}
+		});
+	});
+
 	// Active nav on scroll
 	const sections = Array.from(document.querySelectorAll('main section'));
 	function onScroll(){

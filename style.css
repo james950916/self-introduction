@@ -16,6 +16,11 @@
 .faq-a .qa{background:var(--card);padding:12px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
 .faq-a .question{font-weight:700;margin-bottom:6px}
 .faq-a .answer{color:var(--muted)}
+
+/* Make FAQ questions look interactive and provide a brief active highlight */
+.faq-a .question{cursor:pointer}
+.faq-a .question:hover{opacity:0.92}
+.faq-a .qa--active{box-shadow:0 10px 30px rgba(37,99,235,0.12);transform:translateY(-3px);transition:box-shadow 260ms ease, transform 260ms ease}
 .bg-dark{
 	--bg: #071022;
 	--card: #0b1220;
