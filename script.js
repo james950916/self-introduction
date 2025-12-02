@@ -19,6 +19,42 @@ document.addEventListener('DOMContentLoaded', function(){
 			themeToggle.textContent = isDark ? '🌙' : '☀️';
 			themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
 			themeToggle.setAttribute('aria-label', isDark ? '切換主題（目前：深色）' : '切換主題（目前：亮色）');
+	let themeToggle = document.getElementById('themeToggle');
+
+	// If the theme toggle button is missing from the DOM, create it so icon always appears
+	if(!themeToggle){
+		const headerControls = document.querySelector('.header-controls');
+		if(headerControls){
+			const btn = document.createElement('button');
+			btn.className = 'theme-toggle';
+			btn.id = 'themeToggle';
+			btn.setAttribute('aria-label','切換主題');
+			btn.textContent = '🌙';
+			// insert before menu toggle if present, otherwise append
+			const menuBtn = document.getElementById('menuToggle');
+			if(menuBtn && menuBtn.parentNode === headerControls){
+				headerControls.insertBefore(btn, menuBtn);
+			} else {
+				headerControls.appendChild(btn);
+			}
+			themeToggle = btn;
+		}
+	}
+
+	// Theme handling: light <-> dark, persist to localStorage, respect system pref when no stored choice
+	function applyTheme(theme){
+		if(theme === 'dark'){
+			document.documentElement.setAttribute('data-theme','dark');
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.removeAttribute('data-theme');
+			document.documentElement.classList.remove('dark');
+		}
+		if(themeToggle){
+			// Show icon representing the CURRENT theme: sun for light, moon for dark
+			themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+			themeToggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+			themeToggle.setAttribute('aria-label', theme === 'dark' ? '切換主題（目前：深色）' : '切換主題（目前：亮色）');
 		}
 	}
 
@@ -27,6 +63,11 @@ document.addEventListener('DOMContentLoaded', function(){
 	const initialTheme = savedTheme ? savedTheme : 'light';
 	applyTheme(initialTheme);
 
+	// Default to light unless user has saved a preference
+	const initialTheme = savedTheme ? savedTheme : 'light';
+	applyTheme(initialTheme);
+
+	// If user hasn't saved a preference, listen for system theme changes and adapt
 	if(!savedTheme && prefersDarkMQ && typeof prefersDarkMQ.addEventListener === 'function'){
 		prefersDarkMQ.addEventListener('change', e => {
 			applyTheme(e.matches ? 'dark' : 'light');
@@ -40,6 +81,33 @@ document.addEventListener('DOMContentLoaded', function(){
 			applyTheme(next);
 			localStorage.setItem('site-theme', next);
 		});
+	}
+
+	// Theme (dark mode) toggle: show moon when dark, sun when light
+	const themeToggle = document.getElementById('themeToggle');
+
+	function applyTheme(theme){
+		const isDark = theme === 'dark';
+		document.documentElement.classList.toggle('dark', isDark);
+		if(themeToggle){
+			// Show moon icon when dark, sun when light (reflect current state)
+			themeToggle.textContent = isDark ? '🌙' : '☀️';
+			themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+		}
+	}
+
+	const savedTheme = localStorage.getItem('theme');
+	// Default to light on first visit (ignore system preference unless user explicitly saved a choice)
+	const initialTheme = savedTheme ? savedTheme : 'light';
+	applyTheme(initialTheme);
+
+	if(themeToggle){
+		themeToggle.addEventListener('click', function(){
+	 		const currentlyDark = document.documentElement.classList.contains('dark');
+	 		const next = currentlyDark ? 'light' : 'dark';
+	 		applyTheme(next);
+	 		localStorage.setItem('theme', next);
+	 	});
 	}
 
 	// Mobile menu toggle
