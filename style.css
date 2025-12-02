@@ -91,6 +91,13 @@ body{
 
 .site-footer{padding:20px 0;text-align:center;color:var(--muted)}
 
+/* FAQ A styles */
+.faq-a{display:flex;flex-direction:column;gap:12px;max-width:900px;margin-top:12px}
+.faq-a .faq-item{background:var(--card);padding:12px;border-radius:8px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
+.faq-a .question{font-weight:700;margin-bottom:8px}
+.faq-a .answer{color:var(--text);min-height:36px}
+.faq-a .answer[contenteditable="true"]:focus{outline:2px solid rgba(37,99,235,0.12);}
+
 /* Small dark-mode adjustments */
 :root.dark .site-header{background:linear-gradient(90deg,rgba(3,7,18,0.6),rgba(3,7,18,0.5));backdrop-filter:blur(6px);box-shadow:0 1px 0 rgba(255,255,255,0.02)}
 :root.dark .main-nav{background:var(--card)}
