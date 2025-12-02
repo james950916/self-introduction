@@ -10,6 +10,12 @@
 }
 
 /* Background-only dark mode class (separate from full theme) */
+
+/* FAQ A (fixed answers) */
+.faq-a{max-width:900px;margin-top:12px}
+.faq-a .qa{background:var(--card);padding:12px;border-radius:8px;margin-bottom:10px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
+.faq-a .question{font-weight:700;margin-bottom:6px}
+.faq-a .answer{color:var(--muted)}
 .bg-dark{
 	--bg: #071022;
 	--card: #0b1220;
