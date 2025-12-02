@@ -2,6 +2,23 @@ document.addEventListener('DOMContentLoaded', function(){
 	const menuToggle = document.getElementById('menuToggle');
 	const mainNav = document.getElementById('mainNav');
 	const navLinks = Array.from(document.querySelectorAll('.main-nav a'));
+	const themeToggle = document.getElementById('theme-toggle');
+
+	// Theme handling: light <-> dark, persist to localStorage, respect system pref when no stored choice
+	function applyTheme(theme){
+		const isDark = theme === 'dark';
+		if(isDark){
+			document.documentElement.setAttribute('data-theme','dark');
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.setAttribute('data-theme','light');
+			document.documentElement.classList.remove('dark');
+		}
+		if(themeToggle){
+			// Icon reflects current theme: moon for dark, sun for light
+			themeToggle.textContent = isDark ? '🌙' : '☀️';
+			themeToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+			themeToggle.setAttribute('aria-label', isDark ? '切換主題（目前：深色）' : '切換主題（目前：亮色）');
 	let themeToggle = document.getElementById('themeToggle');
 
 	// If the theme toggle button is missing from the DOM, create it so icon always appears
@@ -43,6 +60,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
 	const savedTheme = localStorage.getItem('site-theme');
 	const prefersDarkMQ = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+	const initialTheme = savedTheme ? savedTheme : 'light';
+	applyTheme(initialTheme);
+
 	// Default to light unless user has saved a preference
 	const initialTheme = savedTheme ? savedTheme : 'light';
 	applyTheme(initialTheme);
