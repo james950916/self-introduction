@@ -144,10 +144,6 @@ body{
 	.profile-photo img{width:140px;height:140px}
 	.skill-label{width:140px}
 	.card img{height:180px}
-	/* Portfolio: force single-column on narrow screens for readability */
-	.portfolio-grid{grid-template-columns:1fr;gap:14px}
-	.card h4{font-size:1.05rem}
-	.card p{font-size:0.98rem;line-height:1.6}
 	.main-nav{right:12px;left:12px}
 }
 
