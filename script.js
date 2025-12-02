@@ -119,58 +119,52 @@ document.addEventListener('DOMContentLoaded', function(){
 		});
 	}
 
-	// Background music control (YouTube iframe) — uses the video id stored in #yt-player[data-video-id]
+	// Background music control (YouTube iframe) — autoplay muted by default; toggle mutes/unmutes
 	(function(){
 		const musicToggle = document.getElementById('music-toggle');
 		const ytContainer = document.getElementById('yt-player');
-		if(!musicToggle || !ytContainer) return; // nothing to do
+		if(!musicToggle || !ytContainer) return;
 
 		const videoId = ytContainer.dataset.videoId;
 		let player = null;
 		let playerReady = false;
-		let playWhenReady = false;
 
-		function setMusicUI(on){
-			musicToggle.textContent = on ? '🔊' : '♪';
-			musicToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+		function setMusicUI(isMuted){
+			// show muted vs unmuted icon
+			musicToggle.textContent = isMuted ? '🔇' : '🔊';
+			musicToggle.setAttribute('aria-pressed', isMuted ? 'true' : 'false');
 		}
 
-		let enabled = localStorage.getItem('bg-music') === 'on';
-		setMusicUI(enabled);
+		// default: autoplay on, start muted
+		let muted = localStorage.getItem('bg-music-muted');
+		if(muted === null) muted = 'true'; // default to muted autoplay
+		const isMuted = muted === 'true';
+		setMusicUI(isMuted);
 
-		// load YouTube IFrame API if needed
-		function loadYouTubeAPI(callback){
-			if(window.YT && window.YT.Player){
-				callback();
-				return;
-			}
+		// load YouTube IFrame API
+		function loadYouTubeAPI(cb){
+			if(window.YT && window.YT.Player) return cb();
 			const tag = document.createElement('script');
 			tag.src = 'https://www.youtube.com/iframe_api';
 			document.head.appendChild(tag);
-			window.onYouTubeIframeAPIReady = callback;
+			window.onYouTubeIframeAPIReady = cb;
 		}
 
 		function createPlayer(){
 			player = new YT.Player('yt-player', {
-				height: '0',
-				width: '0',
-				videoId: videoId,
-				playerVars: {
-					controls: 0,
-					autoplay: 0,
-					modestbranding: 1,
-					rel: 0,
-					loop: 1,
-					playlist: videoId
-				},
+				height: '0', width: '0', videoId: videoId,
+				playerVars: { controls: 0, autoplay: 0, modestbranding: 1, rel: 0, loop: 1, playlist: videoId },
 				events: {
 					onReady: function(){
 						playerReady = true;
 						player.setVolume(50);
-						if(enabled || playWhenReady){
-							player.playVideo();
-							playWhenReady = false;
+						if(isMuted){
+							player.mute();
+						} else {
+							player.unMute();
 						}
+						// attempt autoplay (muted autoplay allowed in most browsers)
+						player.playVideo();
 					}
 				}
 			});
@@ -179,29 +173,33 @@ document.addEventListener('DOMContentLoaded', function(){
 		loadYouTubeAPI(function(){ createPlayer(); });
 
 		musicToggle.addEventListener('click', ()=>{
-			enabled = !enabled;
-			localStorage.setItem('bg-music', enabled ? 'on' : 'off');
-			setMusicUI(enabled);
+			const currentlyMuted = localStorage.getItem('bg-music-muted') === 'true';
+			const nextMuted = !currentlyMuted;
+			localStorage.setItem('bg-music-muted', nextMuted ? 'true' : 'false');
+			setMusicUI(nextMuted);
 			if(!playerReady){
-				// request player to play when ready
-				playWhenReady = enabled;
+				// ensure player exists and will apply mute when ready
 				if(!player) createPlayer();
 				return;
 			}
-			if(enabled){
-				player.playVideo();
+			if(nextMuted){
+				player.mute();
 			} else {
-				player.pauseVideo();
+				player.unMute();
+				player.setVolume(50);
+				player.playVideo();
 			}
 		});
 
-		// Pause when tab hidden
+		// Pause playback when tab hidden, resume only if not muted
 		document.addEventListener('visibilitychange', ()=>{
 			if(!playerReady) return;
 			if(document.hidden){
 				player.pauseVideo();
-			} else if(localStorage.getItem('bg-music') === 'on'){
-				player.playVideo();
+			} else {
+				if(localStorage.getItem('bg-music-muted') === 'false'){
+					player.playVideo().catch(()=>{});
+				}
 			}
 		});
 	})();
