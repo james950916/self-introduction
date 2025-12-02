@@ -1,6 +1,6 @@
 
 :root{
-	--bg:#ffffff;
+	--bg:#f7f9fc;
 	--card:#ffffff;
 	--text:#0f1724;
 	--muted:#6b7280;
@@ -8,8 +8,18 @@
 	--radius:10px;
 	--container:1100px;
 }
-/* Dark theme variables (applied when root has class `dark`) */
-:root.dark{
+
+/* Background-only dark mode class (separate from full theme) */
+.bg-dark{
+	--bg: #071022;
+	--card: #0b1220;
+	--text: #e6eef8;
+	--muted: #9aa6b2;
+	--accent: #60a5fa;
+}
+
+/* Full dark theme applied via class or data-theme attribute */
+:root.dark, [data-theme="dark"]{
 	--bg:#0b1220;
 	--card:#0f1724;
 	--text:#e6eef8;
@@ -29,6 +39,11 @@ body{
 .container{max-width:var(--container);margin:0 auto;padding:0 20px}
 
 .site-header{background:linear-gradient(90deg,rgba(255,255,255,0.9),rgba(255,255,255,0.85));backdrop-filter:blur(6px);position:sticky;top:0;z-index:60;box-shadow:0 1px 0 rgba(16,24,40,0.04)}
+.bg-dark .site-header{background:linear-gradient(90deg,rgba(7,16,34,0.92),rgba(11,18,32,0.88));backdrop-filter:blur(6px);box-shadow:0 1px 0 rgba(255,255,255,0.04);}
+.bg-dark .site-header .header-inner{padding:12px 0}
+.bg-dark .site-header .main-nav a{color:var(--text)}
+.bg-dark .site-header .logo{color:var(--text)}
+.bg-dark .site-header .menu-toggle{color:var(--text)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
 .logo{margin:0;font-size:1.25rem}
 .main-nav{display:flex;gap:18px}
@@ -147,24 +162,7 @@ body{
 
 
 
-/* Dark theme overrides (applied when documentElement has data-theme="dark") */
-[data-theme="dark"]{
-    --bg:#071022;
-    --card:#0b1220;
-    --text:#e6eef8;
-    --muted:#9aa6b2;
-    --accent:#60a5fa;
-}
 
-[data-theme="dark"] .site-header{background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));box-shadow:0 1px 0 rgba(255,255,255,0.02)}
-[data-theme="dark"] .btn.ghost{border-color:rgba(255,255,255,0.06);color:var(--text)}
-[data-theme="dark"] .card{box-shadow:0 12px 30px rgba(2,6,23,0.45)}
-
-/* Ensure overall background and hero adapt to dark theme */
-[data-theme="dark"] body{background:var(--bg)}
-[data-theme="dark"] .hero{background:linear-gradient(180deg, rgba(2,6,23,0.6), transparent)}
-[data-theme="dark"] .hero .lead{color:var(--muted)}
-[data-theme="dark"] .site-footer{background:transparent;color:var(--muted)}
 
 
 
